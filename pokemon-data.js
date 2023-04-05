@@ -13,16 +13,16 @@ $(document).ready(function() {
     });
 
     // https://pokeapi.co/api/v2/pokemon-color/yellow/
-    let request = new XMLHttpRequest();
+    // let request = new XMLHttpRequest();
     // priprema poziva na (pokemon) API
-    request.open("GET", "https://pokeapi.co/api/v2/pokemon-color/yellow/", true);
+    // request.open("GET", "https://pokeapi.co/api/v2/pokemon-color/yellow/", true);
 
-    function popuniPokemone(){
-        const resp = JSON.parse(request.response);
+    function popuniPokemone(data){
+        //const resp = JSON.parse(request.response);
         //console.log(resp);
         const sourceHTML = document.getElementById("lista-pokemona").innerHTML;
         const template = Handlebars.compile(sourceHTML);
-        const ctxData = { pokemon : resp.pokemon_species.slice(0,20), tableClass: 'table' };
+        const ctxData = { pokemon : data.pokemon_species.slice(0,20), tableClass: 'table' };
         const html = template(ctxData);
 
         document.getElementById("div-pokemoni").innerHTML = html;
@@ -64,17 +64,37 @@ $(document).ready(function() {
     }
 
     // funkcija koja ce se pozvati na loadanju stranice
-    request.onload = function() {
-        popuniPokemone();
-        afterRender();
+    // request.onload = function() {
+    //     popuniPokemone();
+    //     afterRender();
         
-    }
+    // }
     // posanji request na (pokemon) API
-    request.send();
+    //request.send();
     
 
     $(window).resize(() => {
         console.log("Width: " + window.innerWidth);
         console.log("Height: " + $(window).height());
     });
+    // jedan način
+    // $.ajax({
+    //     url: 'https://pokeapi.co/api/v2/pokemon-color/yellow/',
+    // }).done(function(data){
+    //     popuniPokemone(data);
+    //     afterRender();
+    // });
+    
+    // drugi način
+    $.ajax({
+        url: 'https://pokeapi.co/api/v2/pokemon-color/yellow/',
+        type: 'GET',
+        success: function(data){
+            popuniPokemone(data);
+            afterRender();
+        },
+        error : function(){
+
+        }
+    })
 });
